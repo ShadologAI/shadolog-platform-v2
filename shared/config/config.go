@@ -44,7 +44,7 @@ func LoadBase(serviceName string, defaultPort int) *Base {
 		ClickHouseAddr: envStr("CLICKHOUSE_ADDR", "localhost:9000"),
 		RedisURL:       envStr("REDIS_URL", "redis://localhost:6379"),
 		NATSURLs:       envStr("NATS_URL", "nats://localhost:4222"),
-		JWTSecret:      envStr("JWT_SECRET", "dev-secret-change-me"),
+		JWTSecret:      jwtSecretOrDevDefault(),
 		JWTIssuer:      envStr("JWT_ISSUER", "shadolog"),
 		SpiceDBAddr:    envStr("SPICEDB_ADDR", "localhost:50051"),
 		SpiceDBToken:   envStr("SPICEDB_TOKEN", ""),
@@ -64,6 +64,17 @@ func envStr(key, fallback string) string {
 		return v
 	}
 	return fallback
+}
+
+func jwtSecretOrDevDefault() string {
+	if v := os.Getenv("JWT_SECRET"); v != "" {
+		return v
+	}
+	if os.Getenv("SHADOLOG_DEV_MODE") == "true" {
+		return "shadolog-dev-secret-do-not-use-in-production"
+	}
+	// In production without JWT_SECRET set, return empty — callers must validate.
+	return ""
 }
 
 func envInt(key string, fallback int) int {
