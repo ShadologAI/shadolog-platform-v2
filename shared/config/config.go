@@ -40,7 +40,7 @@ func LoadBase(serviceName string, defaultPort int) *Base {
 	return &Base{
 		ServiceName:    serviceName,
 		ServicePort:    envInt("PORT", defaultPort),
-		PostgresURL:    envStr("DATABASE_URL", "postgres://shadolog:shadolog@localhost:5432/shadolog?sslmode=disable"),
+		PostgresURL:    envStr("POSTGRES_URL", envStr("DATABASE_URL", "postgres://shadolog:shadolog@localhost:5432/shadolog?sslmode=disable")),
 		ClickHouseAddr: envStr("CLICKHOUSE_ADDR", "localhost:9000"),
 		RedisURL:       envStr("REDIS_URL", "redis://localhost:6379"),
 		NATSURLs:       envStr("NATS_URL", "nats://localhost:4222"),
