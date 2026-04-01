@@ -156,6 +156,11 @@ func main() {
 		// Graph entities (viewer+)
 		r.Get("/api/graph", graphH.Graph)
 		r.Get("/api/entities", graphH.ListEntities)
+		// V2 route aliases (dashboard uses /api/v2/* paths)
+		r.Get("/api/v2/entities", graphH.ListEntities)
+		r.Get("/api/v2/relationships", graphH.Graph)
+		r.Get("/api/v2/findings", findingH.List)
+		r.Get("/api/v2/findings/by-severity", findingH.BySeverity)
 
 		// Audit chain — PROVE endpoints (admin+, Command tier)
 		r.Group(func(r chi.Router) {
